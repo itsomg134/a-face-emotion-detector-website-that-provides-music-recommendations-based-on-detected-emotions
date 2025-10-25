@@ -1,0 +1,186 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "npm: install",
+      "type": "npm",
+      "script": "install",
+      "problemMatcher": [],
+      "detail": "Install all dependencies",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "npm: start",
+      "type": "npm",
+      "script": "start",
+      "problemMatcher": [],
+      "detail": "Start production server",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      }
+    },
+    {
+      "label": "npm: dev",
+      "type": "npm",
+      "script": "dev",
+      "problemMatcher": [],
+      "detail": "Start development server with nodemon",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      }
+    },
+    {
+      "label": "docker: build",
+      "type": "shell",
+      "command": "docker build --target production -t face-emotion-detector:latest .",
+      "problemMatcher": [],
+      "detail": "Build Docker production image",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "docker: build-dev",
+      "type": "shell",
+      "command": "docker build --target development -t face-emotion-detector:dev .",
+      "problemMatcher": [],
+      "detail": "Build Docker development image",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "docker: run",
+      "type": "shell",
+      "command": "docker run -d -p 3000:3000 --name emotion-detector face-emotion-detector:latest",
+      "problemMatcher": [],
+      "detail": "Run Docker container",
+      "dependsOn": ["docker: build"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "docker: stop",
+      "type": "shell",
+      "command": "docker stop emotion-detector && docker rm emotion-detector",
+      "problemMatcher": [],
+      "detail": "Stop and remove Docker container",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "docker: logs",
+      "type": "shell",
+      "command": "docker logs -f emotion-detector",
+      "problemMatcher": [],
+      "detail": "View Docker container logs",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      }
+    },
+    {
+      "label": "docker: debug",
+      "type": "shell",
+      "command": "docker run -d -p 3000:3000 -p 9229:9229 --name emotion-detector-debug face-emotion-detector:dev",
+      "problemMatcher": [],
+      "detail": "Run Docker container in debug mode",
+      "dependsOn": ["docker: build-dev"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "git: commit",
+      "type": "shell",
+      "command": "git add . && git commit -m '${input:commitMessage}'",
+      "problemMatcher": [],
+      "detail": "Commit all changes",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "git: push",
+      "type": "shell",
+      "command": "git push origin main",
+      "problemMatcher": [],
+      "detail": "Push to remote repository",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "clean: node_modules",
+      "type": "shell",
+      "command": "rm -rf node_modules && npm install",
+      "windows": {
+        "command": "rmdir /s /q node_modules && npm install"
+      },
+      "problemMatcher": [],
+      "detail": "Clean and reinstall node_modules",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "clean: docker",
+      "type": "shell",
+      "command": "docker system prune -af",
+      "problemMatcher": [],
+      "detail": "Clean Docker cache and images",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "open: browser",
+      "type": "shell",
+      "command": "start http://localhost:3000",
+      "windows": {
+        "command": "start http://localhost:3000"
+      },
+      "linux": {
+        "command": "xdg-open http://localhost:3000"
+      },
+      "osx": {
+        "command": "open http://localhost:3000"
+      },
+      "problemMatcher": [],
+      "detail": "Open app in browser",
+      "presentation": {
+        "reveal": "silent"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "commitMessage",
+      "type": "promptString",
+      "description": "Enter commit message",
+      "default": "Update code"
+    }
+  ]
+}
